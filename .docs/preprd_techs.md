@@ -35,10 +35,11 @@ async def generate_iep_prompt(
 
 AI Component Integration
 Grammar Analysis Subsystem
-Tool	Integration Strategy	IEP Support Features
-Sapling API3	Real-time writing feedback	Voice-to-text alignment
-QuillBot6	Error correction engine	Multimodal input processing
-LanguageTool	Open-source alternative	Custom rule creation for IEPs
+|Tool	|Integration Strategy	|IEP Support Features| chosen|
+|-------|--------------------|-------------------|----|
+|Sapling API3|	Real-time writing feedback|	Voice-to-text alignment| this is what I want to use|
+|QuillBot6|	Error correction engine|	Multimodal input processing||
+|LanguageTool|	Open-source alternative|	Custom rule creation for IEPs||
 
 ```javascript
 // React component handling accessibility needs
@@ -54,11 +55,11 @@ Base Templates: JSON-LD structured prompts with W3C accessibility metadata
 
 AI Enhancement:
 
-Taskade's Prompt Generator4 for narrative arc creation
+Taskade's Prompt Generator4 for narrative arc creation 
 
-GPT-4-Turbo fine-tuned on educational standards
+GPT-4-Turbo fine-tuned on educational standards \\ we already have access to this as not fine tuned so we might just try to prompt engineer it
 
-Custom RLHF models for IEP goal alignment
+Custom RLHF models for IEP goal alignment \\ probably too involved for our scope and timetable
 
 Validation Pipeline:
 
@@ -70,11 +71,11 @@ C --> D(Teacher Approval Queue)
 D --> E(Student Delivery)
 ```
 Automated Grading Microservice
-Gradescope API5: Batch processing of writing assignments
+Gradescope API5: Batch processing of writing assignments \\ I don't see value here
 
-Graded Pro: Real-time progress tracking against IEP benchmarks
+Graded Pro: Real-time progress tracking against IEP benchmarks \\literal AI slop
 
-Custom NLP: SpaCy pipelines analyzing writing complexity growth
+Custom NLP: SpaCy pipelines analyzing writing complexity growth \\probably too involved for our scope and timetable
 
 Feedback System:
 ```python
