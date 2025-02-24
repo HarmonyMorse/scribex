@@ -1,19 +1,26 @@
-Technical Architecture for ScribeX: AI-Powered Writing Education Platform
+# Technical Architecture for ScribeX: AI-Powered Writing Education Platform
+
 This report analyzes optimal technology choices for building ScribeX's microservice architecture, focusing on AI integration strategies for grammar analysis, prompt generation, and automated grading while addressing the outlined user stories and accessibility requirements.
 
-Foundational Backend Architecture
+## Foundational Backend Architecture
+
 Python FastAPI Microservices
 FastAPI provides asynchronous capabilities critical for handling concurrent user interactions in educational environments1. Key components:
 
-Database Layer: PostgreSQL with asyncpg driver for high-concurrency IEP goal tracking and narrative storage
+### Database Layer
+PostgreSQL with asyncpg driver for high-concurrency IEP goal tracking and narrative storage
 
-ORM: SQLAlchemy 2.0+ with asynchronous support for complex queries across student portfolios1
+### ORM
+SQLAlchemy 2.0+ with asynchronous support for complex queries across student portfolios1
 
-Validation: Pydantic V2 models ensuring data integrity for IEP accommodations and progress tracking
+### Validation
+Pydantic V2 models ensuring data integrity for IEP accommodations and progress tracking
 
-Background Tasks: Celery with Redis broker for AI processing queues (grammar analysis, prompt generation)
+### Background Tasks
+Celery with Redis broker for AI processing queues (grammar analysis, prompt generation)
 
-API Gateway: Traefik with JWT authentication for role-based access control (teachers/admins/parents)
+### API Gateway
+Traefik with JWT authentication for role-based access control (teachers/admins/parents)
 
 ```python
 # Sample FastAPI endpoint for IEP-compliant prompt generation
@@ -33,13 +40,15 @@ async def generate_iep_prompt(
     return sanitize_output(generated, student.accessibility_needs)
 ```
 
-AI Component Integration
-Grammar Analysis Subsystem
-|Tool	|Integration Strategy	|IEP Support Features| chosen|
-|-------|--------------------|-------------------|----|
-|Sapling API3|	Real-time writing feedback|	Voice-to-text alignment| this is what I want to use|
-|QuillBot6|	Error correction engine|	Multimodal input processing||
-|LanguageTool|	Open-source alternative|	Custom rule creation for IEPs||
+### AI Component Integration
+
+### Grammar Analysis Subsystem
+
+| Tool         | Integration Strategy       | IEP Support Features          |comments|
+| ------------ | -------------------------- | ----------------------------- |--------------------------|
+| Sapling API3 | Real-time writing feedback | Voice-to-text alignment       |this is what I want to use|
+| QuillBot6    | Error correction engine    | Multimodal input processing   ||
+| LanguageTool | Open-source alternative    | Custom rule creation for IEPs ||
 
 ```javascript
 // React component handling accessibility needs
@@ -50,18 +59,19 @@ Grammar Analysis Subsystem
 </WritingInterface>
 ```
 
-Prompt Generation Architecture
-Base Templates: JSON-LD structured prompts with W3C accessibility metadata
+### Prompt Generation Architecture
 
-AI Enhancement:
+#### Base Templates
+JSON-LD structured prompts with W3C accessibility metadata
 
-Taskade's Prompt Generator4 for narrative arc creation 
+#### AI Enhancement
+Taskade's Prompt Generator4 for narrative arc creation
 
 GPT-4-Turbo fine-tuned on educational standards \\ we already have access to this as not fine tuned so we might just try to prompt engineer it
 
 Custom RLHF models for IEP goal alignment \\ probably too involved for our scope and timetable
 
-Validation Pipeline:
+#### Validation Pipeline
 
 ```text
 graph TD
@@ -77,7 +87,7 @@ Graded Pro: Real-time progress tracking against IEP benchmarks \\literal AI slop
 
 Custom NLP: SpaCy pipelines analyzing writing complexity growth \\probably too involved for our scope and timetable
 
-Feedback System:
+#### Feedback System
 ```python
 def generate_feedback(student: StudentData) -> Feedback:
     grammar_errors = grammar_check(student.writing)
@@ -90,15 +100,21 @@ def generate_feedback(student: StudentData) -> Feedback:
         story_update=narrative
     )
 ```
-Frontend Implementation Strategy
-React Core Architecture
-State Management: Jotai for IEP tracking context
+## Frontend Implementation Strategy
+### Core
+React with JavaScript and Node.js
 
-Accessibility: React-aria components with WCAG 2.2 compliance
+### State Management
+Jotai for IEP tracking context
 
-Narrative Visualization: D3.js for story path mapping
+### Accessibility
+React-aria components with WCAG 2.2 compliance
 
-Mobile Support: React Native Web for cross-platform rendering
+### Narrative Visualization
+D3.js for story path mapping
+
+### Mobile Support
+React Native Web for cross-platform rendering
 ```javascript
 // Adaptive learning component
 <AdaptiveLesson>
@@ -111,8 +127,8 @@ Mobile Support: React Native Web for cross-platform rendering
 </AdaptiveLesson>
 ```
 
-Data Management Considerations
-PostgreSQL Schema Design
+## Data Management Considerations
+### PostgreSQL Schema Design
 ```sql
 CREATE TABLE iep_goals (
     goal_id UUID PRIMARY KEY,
