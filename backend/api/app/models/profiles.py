@@ -1,7 +1,9 @@
 from enum import Enum
 from datetime import datetime
+from uuid import UUID, uuid4
 from typing import Optional, List
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum as SQLEnum, Boolean, JSON, DateTime
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, relationship
 
 from .base import Base
@@ -15,8 +17,8 @@ class UserType(str, Enum):
 class BaseProfile(Base):
     __tablename__ = "profiles"
     
-    id: Mapped[int] = Column(Integer, primary_key=True)
-    user_id: Mapped[int] = Column(Integer, ForeignKey("users.id"), unique=True)
+    id: Mapped[UUID] = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[UUID] = Column(UUID(as_uuid=True), ForeignKey("users.id"), unique=True)
     user_type: Mapped[UserType] = Column(SQLEnum(UserType))
     first_name: Mapped[str] = Column(String)
     last_name: Mapped[str] = Column(String)
@@ -33,7 +35,7 @@ class BaseProfile(Base):
 class StudentProfile(BaseProfile):
     __tablename__ = "student_profiles"
     
-    id: Mapped[int] = Column(Integer, ForeignKey("profiles.id"), primary_key=True)
+    id: Mapped[UUID] = Column(UUID(as_uuid=True), ForeignKey("profiles.id"), primary_key=True)
     grade_level: Mapped[int] = Column(Integer)
     has_iep: Mapped[bool] = Column(Boolean, default=False)
     # IEP Details
@@ -56,7 +58,7 @@ class StudentProfile(BaseProfile):
 class TeacherProfile(BaseProfile):
     __tablename__ = "teacher_profiles"
     
-    id: Mapped[int] = Column(Integer, ForeignKey("profiles.id"), primary_key=True)
+    id: Mapped[UUID] = Column(UUID(as_uuid=True), ForeignKey("profiles.id"), primary_key=True)
     subject_area: Mapped[str] = Column(String)
     
     __mapper_args__ = {
@@ -66,7 +68,7 @@ class TeacherProfile(BaseProfile):
 class ParentProfile(BaseProfile):
     __tablename__ = "parent_profiles"
     
-    id: Mapped[int] = Column(Integer, ForeignKey("profiles.id"), primary_key=True)
+    id: Mapped[UUID] = Column(UUID(as_uuid=True), ForeignKey("profiles.id"), primary_key=True)
     
     # Relationships
     students: Mapped[List["StudentProfile"]] = relationship(
