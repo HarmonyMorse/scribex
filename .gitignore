@@ -2,6 +2,8 @@
 .env
 *.env
 !.env.template
++ venv/
++ .venv/
 
 # OS files
 .DS_Store      # For Mac
