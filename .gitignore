@@ -5,4 +5,7 @@
 
 # OS files
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Sensitive tracking
+DESTROY.md 
