@@ -20,7 +20,7 @@ services:
     build: ./api
     volumes:
       - ./api:/app
-      - ./.env:/app/.env
+      - ./.env:/app/.env:ro
     ports:
       - "8000:8000"
     environment:
