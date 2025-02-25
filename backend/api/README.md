@@ -47,6 +47,96 @@ curl http://localhost:8000/users/me \
   -H "Authorization: Bearer ${TOKEN}"
 ```
 
+## Development Setup
+
+### Prerequisites
+- Docker and Docker Compose
+- PowerShell (Windows) or Bash (Mac/Linux)
+
+### Environment Setup
+1. Copy the environment template:
+   ```bash
+   cp .env.template .env
+   ```
+
+2. Update the `.env` file with your settings:
+   ```env
+   # Required settings
+   POSTGRES_USER=scribex
+   POSTGRES_PASSWORD=your_secure_password
+   POSTGRES_DB=scribex_db
+   
+   # JWT Settings
+   JWT_SECRET_KEY=your_secure_key
+   JWT_ALGORITHM=HS256
+   JWT_ACCESS_TOKEN_EXPIRE_MINUTES=30
+   JWT_REFRESH_TOKEN_EXPIRE_DAYS=7
+   ```
+
+### Starting the Services
+Start the database and API services:
+```bash
+docker compose up -d
+```
+
+### Database Migrations
+We provide scripts for managing database migrations in both PowerShell and Bash.
+
+#### Before Running Migration Scripts
+The scripts expect:
+1. Docker daemon to be running
+2. No existing containers running for this project (if there are, run `docker compose down`)
+3. A valid `.env` file in the `backend/` directory
+
+The scripts will:
+1. Build/rebuild the API container if needed
+2. Start the database container
+3. Wait for the database to be healthy
+4. Run the migration commands
+
+#### Migration Commands
+By default, the scripts will apply existing migrations:
+```bash
+# Windows
+./scripts/migrate.ps1
+
+# Mac/Linux
+./scripts/migrate.sh
+```
+
+To create a new migration:
+```bash
+# Windows
+./scripts/migrate.ps1 --new "migration description"
+
+# Mac/Linux
+./scripts/migrate.sh --new "migration description"
+```
+
+The --new flag will:
+1. Create a new migration based on model changes
+2. Apply the new migration immediately
+3. Require a description of what changed
+
+#### Reset Database (Nuclear Option)
+To completely reset the database and migrations:
+```bash
+# Windows
+./scripts/migrate.ps1 --nuke "fresh start"
+
+# Mac/Linux
+./scripts/migrate.sh --nuke "fresh start"
+```
+
+### Accessing the API
+Once running, the API will be available at:
+- API: http://localhost:8000
+- Swagger Documentation: http://localhost:8000/docs
+- ReDoc Documentation: http://localhost:8000/redoc
+
+### Development
+The API uses FastAPI with hot-reload enabled. Any changes to the code will automatically restart the server.
+
 ```
 api/
 ├── app/
