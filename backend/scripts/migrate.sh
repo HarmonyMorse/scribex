@@ -5,11 +5,14 @@ set -e
 
 # Parse arguments
 nuke=false
+new=false
 message="database migration"
 
 for arg in "$@"; do
     if [ "$arg" = "--nuke" ]; then
         nuke=true
+    elif [ "$arg" = "--new" ]; then
+        new=true
     else
         message="$arg"
     fi
@@ -24,6 +27,13 @@ fi
 
 echo -e "\033[32mBuilding API container...\033[0m"
 docker compose build api
+
+if [ "$new" = false ]; then
+    echo -e "\033[32mApplying existing migrations...\033[0m"
+    docker compose run --rm api alembic upgrade head
+    echo -e "\033[32mMigration complete!\033[0m"
+    exit 0
+fi
 
 echo -e "\033[32mCreating migration...\033[0m"
 docker compose run --rm api alembic revision --autogenerate -m "$message"
