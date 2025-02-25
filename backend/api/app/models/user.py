@@ -2,7 +2,7 @@ from uuid import uuid4
 from datetime import datetime
 from sqlalchemy import Column, String, Boolean, DateTime
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import relationship
 
 from .base import Base
 
@@ -17,5 +17,4 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # Relationship
-    profile: Mapped["BaseProfile"] = relationship("BaseProfile", back_populates="user", uselist=False) 
+    profile = relationship("BaseProfile", back_populates="user", uselist=False) 
