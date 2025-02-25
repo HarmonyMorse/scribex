@@ -1,0 +1,34 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm install
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**
+      - package-lock.json
+      - package.json
+      - yarn.lock
+
+
+# version: 1
+# frontend:
+#   phases:
+#     # IMPORTANT - Please verify your build commands
+#     build:
+#       commands: []
+#   artifacts:
+#     # IMPORTANT - Please verify your build output directory
+#     baseDirectory: /
+#     files:
+#       - '**/*'
+#   cache:
+#     paths: []
