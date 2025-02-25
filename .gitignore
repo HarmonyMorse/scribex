@@ -4,8 +4,8 @@
 !.env.template
 
 # OS files
-.DS_Store
-Thumbs.db
+.DS_Store      # For Mac
+Thumbs.db      # For Windows
 
 # Sensitive tracking
 DESTROY.md 
