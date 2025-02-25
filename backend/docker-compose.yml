@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-scribex}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword}
+      POSTGRES_DB: ${POSTGRES_DB:-scribex_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scribex} -d ${POSTGRES_DB:-scribex_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./api
+    volumes:
+      - ./api:/app
+      - ./api/.env:/app/.env
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-scribex}:${POSTGRES_PASSWORD:-devpassword}@db:5432/${POSTGRES_DB:-scribex_db}
+      ENVIRONMENT: development
+      # Security
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-temporary_secret_key}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      # External API Keys (managed through secrets)
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-dummy_key}
+      SAPLING_API_KEY: ${SAPLING_API_KEY:-dummy_key}
+      WHISPER_API_KEY: ${WHISPER_API_KEY:-dummy_key}
+      # API Timeouts and Retries
+      API_TIMEOUT: 60
+      API_MAX_RETRIES: 3
+      # Rate Limiting
+      RATE_LIMIT_MINUTE: 60
+      # External API URLs (can be changed for different environments)
+      OPENAI_API_URL: https://api.openai.com/v1
+      SAPLING_API_URL: https://api.sapling.ai/api/v1
+      SECRET_KEY: your-secret-key-for-jwt
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app
+
+volumes:
+  postgres_data: 

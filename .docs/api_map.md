@@ -21,7 +21,7 @@ Description: Used by system administrators to create other administrator account
 Description: Fetches all relevant user profile information, including roles, accommodations, and associated data.
 
 ### Update User Profile
-`PATCH /users/{userId} { "email": "string", "profile": { ... } }`  
+`POST /users/{userId} { "email": "string", "profile": { ... } }`  
 Description: Edits user profile information (e.g. name, accommodations, contact info).
 
 ### Delete User
