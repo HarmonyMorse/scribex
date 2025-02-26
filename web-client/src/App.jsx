@@ -1,6 +1,11 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useScreenSize } from './hooks/useScreenSize';
+import ScreenSizeWarning from './components/ScreenSizeWarning';
 import ApiTest from './components/ApiTest';
 import './App.css';
+
+// Temporary mock for user type - replace with actual auth state later
+const isStudent = true;
 
 const router = createBrowserRouter([
   {
@@ -20,6 +25,13 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const { isScreenTooLarge } = useScreenSize();
+
+  // Show warning only for students on large screens
+  if (isStudent && isScreenTooLarge) {
+    return <ScreenSizeWarning />;
+  }
+
   return <RouterProvider router={router} />;
 }
 
