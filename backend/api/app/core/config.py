@@ -3,7 +3,7 @@ from pathlib import Path
 from os import getenv
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = "postgresql://scribex:devpassword@db:5432/scribex_db"
+    DATABASE_URL: str = f"postgresql://scribex:{getenv('POSTGRES_PASSWORD')}@db:5432/{getenv('POSTGRES_DB')}"
     PROJECT_NAME: str = "ScribeX"
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str
@@ -16,6 +16,6 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str = getenv('POSTGRES_PASSWORD')
     POSTGRES_DB: str = getenv('POSTGRES_DB')
     class Config:
-        env_file = ".env"
+        env_file = "/app/.env"
 
 settings = Settings() 
