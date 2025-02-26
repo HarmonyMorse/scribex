@@ -32,4 +32,10 @@ class ParentProfileCreate(ProfileBase):
     student_ids: Optional[List[int]] = None
 
 class GuardianCreate(UserBase):
-    profile: ParentProfileCreate 
+    profile: ParentProfileCreate
+
+class AdminProfileCreate(ProfileBase):
+    department: Optional[str] = None
+
+class AdminCreate(UserBase):
+    profile: AdminProfileCreate 
