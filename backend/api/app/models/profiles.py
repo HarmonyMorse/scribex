@@ -13,6 +13,7 @@ class UserType(str, Enum):
     STUDENT = "student"
     TEACHER = "teacher"
     PARENT = "parent"
+    ADMIN = "admin"
 
 class BaseProfile(Base):
     __tablename__ = "profiles"
@@ -59,7 +60,8 @@ class TeacherProfile(BaseProfile):
     __tablename__ = "teacher_profiles"
     
     id: Mapped[UUID] = Column(UUID(as_uuid=True), ForeignKey("profiles.id"), primary_key=True)
-    subject_area: Mapped[str] = Column(String)
+    subject: Mapped[str] = Column(String)
+    room_number: Mapped[str] = Column(String)
     
     __mapper_args__ = {
         "polymorphic_identity": "teacher"
@@ -79,4 +81,14 @@ class ParentProfile(BaseProfile):
     
     __mapper_args__ = {
         "polymorphic_identity": "parent"
+    }
+
+class AdminProfile(BaseProfile):
+    __tablename__ = "admin_profiles"
+    
+    id: Mapped[UUID] = Column(UUID(as_uuid=True), ForeignKey("profiles.id"), primary_key=True)
+    department: Mapped[Optional[str]] = Column(String, nullable=True)
+    
+    __mapper_args__ = {
+        "polymorphic_identity": "admin"
     } 
